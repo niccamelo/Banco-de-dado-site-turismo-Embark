@@ -1,26 +1,26 @@
-import java.util.Date;
-public class Compra {
-	public  String nota_fiscal;
-	public  Date  data_compra;
-	public  String nome_cliente;
-	public int quantidade_compra;
-	public String destino ;
-	public int cpf_cliente;
 
-	public String getnota_fiscal() {
+public class Compra {
+	private  int nota_fiscal;
+	private  String  data_compra;
+	private  String nome_cliente;
+	private int quantidade_compra;
+	private String destino ;
+	private int cpf_cliente;
+
+	public int getnota_fiscal() {
 		return nota_fiscal;
 	}
 
-	public void setnota_fiscal(String nota_fiscal) {
+	public void setnota_fiscal(int nota_fiscal) {
 		this.nota_fiscal = nota_fiscal;
 	}
 
 	
-	public Date getdata_compra() {
+	public String getdata_compra() {
 		return data_compra;
 	}
 
-	public void setdata_compra(Date data_compra) {
+	public void setdata_compra(String data_compra) {
 		this.data_compra = data_compra;
 	}
 	

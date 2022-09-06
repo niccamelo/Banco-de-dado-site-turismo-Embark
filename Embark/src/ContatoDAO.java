@@ -3,10 +3,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
+
 
 public class ContatoDAO {
-	private static final Date Date = null;
+	
 	Connection conn = null;
 	PreparedStatement pstm = null;
 
@@ -493,7 +493,7 @@ public class ContatoDAO {
 public void save(Pct_viagem pct_viagem) {
 
 
-	String sql = "INSERT INTO pct_viagem (preço, data_da_viagem, destino, condução, id_hosp)" + " VALUES(?,?,?,?,?)";
+	String sql = "INSERT INTO pct_viagem (preço, data_da_viagem, destino, condução)" + " VALUES(?,?,?,?)";
 
 	try {
 		conn = Conexao.createConnectionToMySQL();
@@ -504,7 +504,6 @@ public void save(Pct_viagem pct_viagem) {
 		pstm.setString(2, pct_viagem.getdata_da_viagem());
 		pstm.setString(3, pct_viagem.getdestino());
 		pstm.setString(4, pct_viagem.getcondução());
-		pstm.setInt(5, pct_viagem.id_hosp());
 		
 		pstm.execute();
 
@@ -513,7 +512,7 @@ public void save(Pct_viagem pct_viagem) {
 		e.printStackTrace();
 	} finally {
 
-		// Fecha as conexões
+		
 
 		try {
 			if (pstm != null) {
@@ -712,5 +711,233 @@ public Pct_viagem getPct_viagemByid(int id) {
 		}
 	}
 	return pct_viagem;
+	
+	
+}
+
+
+public void save(Compra compra) {
+
+	
+
+	String sql = "INSERT INTO compra (data_compra, nome_cliente, quantidade_compra, destino, cpf_cliente)" + " VALUES(?,?,?,?,?)";
+
+	try {
+		conn = Conexao.createConnectionToMySQL();
+
+		pstm = conn.prepareStatement(sql);
+
+		pstm.setString(1, compra.getdata_compra());
+		pstm.setString(2, compra.getnome_cliente());
+		pstm.setInt(3, compra.getquantidade_compra());
+		pstm.setString(4, compra.getdestino());
+		pstm.setInt(5, compra.getcpf_cliente());
+		
+		pstm.execute();
+
+	} catch (Exception e) {
+
+		e.printStackTrace();
+	} finally {
+
+
+		try {
+			if (pstm != null) {
+
+				pstm.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+}
+
+public void removeById3(int id) {
+
+	String sql = "DELETE FROM compra WHERE nota_fiscal = ?";
+
+	try {
+		conn = Conexao.createConnectionToMySQL();
+
+		pstm = conn.prepareStatement(sql);
+
+		pstm.setInt(1, id);
+
+		pstm.execute();
+
+	} catch (Exception e) {
+
+		e.printStackTrace();
+	} finally {
+
+		try {
+			if (pstm != null) {
+
+				pstm.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+}
+
+public void update(Compra compra) {
+
+	String sql = "UPDATE compra SET data_compra = ?,nome_cliente = ?, quantidade_compra = ?, destino = ?, cpf_cliente = ?" + " WHERE nota_fiscal = ?";
+
+	try {
+		conn = Conexao.createConnectionToMySQL();
+
+		pstm = conn.prepareStatement(sql);
+
+		
+					pstm.setString(1, compra.getdata_compra());
+					pstm.setString(2, compra.getnome_cliente());
+					pstm.setInt(3, compra.getquantidade_compra());
+					pstm.setString(4, compra.getdestino());
+					pstm.setInt(5, compra.getcpf_cliente());
+		
+		pstm.execute();
+
+	} catch (Exception e) {
+
+		e.printStackTrace();
+	} finally {
+
+		
+
+		try {
+			if (pstm != null) {
+
+				pstm.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+}
+
+public List<Compra> getCompras() {
+
+	String sql = "SELECT * FROM compra";
+
+	List<Compra> compras = new ArrayList<Compra>();
+
+	
+	ResultSet rset = null;
+
+	try {
+		conn = Conexao.createConnectionToMySQL();
+
+		pstm = conn.prepareStatement(sql);
+
+		rset = pstm.executeQuery();
+
+		while (rset.next()) {
+
+			Compra compra = new Compra();
+
+			
+			compra.setnota_fiscal(rset.getInt("nota_fiscal"));
+			compra.setdata_compra(rset.getString("data_compra"));
+			compra.setnome_cliente(rset.getString("nome_cliente"));
+			compra.setquantidade_compra(rset.getInt("quantidade_compra"));
+			compra.setdestino(rset.getString("destino"));
+			compra.setcpf_cliente(rset.getInt("cpf_cliente"));
+			
+
+			
+			compras.add(compra);
+		}
+	} catch (Exception e) {
+
+		e.printStackTrace();
+	} finally {
+
+		try {
+
+			if (rset != null) {
+
+				rset.close();
+			}
+
+			if (pstm != null) {
+
+				pstm.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	return compras;
+}
+
+
+public Compra getCompraByid(int id) {
+
+	String sql = "SELECT * FROM compra where nota_fiscal = ?";
+	Compra compra = new Compra();
+
+	ResultSet rset = null;
+
+	try {
+		conn = Conexao.createConnectionToMySQL();
+		pstm = conn.prepareStatement(sql);
+		pstm.setInt(1, id);
+		rset = pstm.executeQuery();
+
+		rset.next();
+
+		
+		compra.setnota_fiscal(rset.getInt("nota_fiscal"));
+		compra.setdata_compra(rset.getString("data_compra"));
+		compra.setnome_cliente(rset.getString("nome_cliente"));
+		compra.setquantidade_compra(rset.getInt("quantidade_compra"));
+		compra.setdestino(rset.getString("destino"));
+		compra.setcpf_cliente(rset.getInt("cpf_cliente"));
+
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		try {
+			if (rset != null) {
+				rset.close();
+			}
+			if (pstm != null) {
+				pstm.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	return compra;
 }
 }

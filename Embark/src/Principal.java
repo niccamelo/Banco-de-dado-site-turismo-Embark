@@ -1,4 +1,6 @@
 
+
+ 
 import java.util.Scanner;
 
 public class Principal {
@@ -9,7 +11,7 @@ public class Principal {
 		Cliente cliente = new Cliente();
 		Hospedagem hospedagem = new Hospedagem();
 		Pct_viagem pct_viagem = new Pct_viagem();
-		
+		Compra compra = new Compra();
 		
 		Scanner entrada = new Scanner(System.in);
 		int opcao = 0;
@@ -33,6 +35,12 @@ public class Principal {
 		String destino = "";
 		String condução = "";
 		
+		int nota_fiscal = 0 ;
+		String  data_compra = "";
+		String nome_cliente="";
+		int quantidade_compra=0;
+		int cpf_cliente = 0;
+		
 		
 		do		
 		{
@@ -40,6 +48,8 @@ public class Principal {
 		System.out.println("1 - Cadastro de cliente");
 		System.out.println("2 - Cadastrar Hospedagem");
 		System.out.println("3 - Cadastrar Pacote de Viagem");
+		System.out.println("4 - Pesquisar Compra");
+		
 		opcao = entrada.nextInt();
 
 		switch (opcao) {
@@ -351,9 +361,6 @@ public class Principal {
 			condução = entrada.next();
 			pct_viagem.setcondução(condução);
 
-			System.out.println("Digite o Id da Hospedagem: ");
-			id_hosp = entrada.nextInt();
-			pct_viagem.setid_hosp(id_hosp);
 
 			contatoDAO.save(pct_viagem);
 			break;
@@ -366,7 +373,7 @@ public class Principal {
 				contatoDAO.removeById2(id_destino);
 				
 			} catch (Exception e) {
-				// e.getMessage();
+				
 				 
 				System.out.println(" Nenhum contato para excluir ");
 			}
@@ -416,11 +423,11 @@ public class Principal {
 		case 5: {
 
 			System.out.print("Digite o ID para buscar: ");
-			int id2 = entrada.nextInt();
+			int id3 = entrada.nextInt();
 			
 			Pct_viagem v = new Pct_viagem();
 
-			v = contatoDAO.getPct_viagemByid(id2);
+			v = contatoDAO.getPct_viagemByid(id3);
 
 			System.out.println("PREÇO DA VIAGEM: " + v.getpreço());
 			System.out.println("DATA DA VIAGEM: " + v.getdata_da_viagem());
@@ -440,18 +447,131 @@ public class Principal {
 		}
 
 }
-		
-		}
 
+
+		case 4 :{
+		System.out.println("===== Cadastro Compra =====");
+		System.out.println("1 - Cadastrar de compra");
+		System.out.println("2 - Excluir compra");
+		System.out.println("3 - Atualizar compra");
+		System.out.println("4 - Mostrar compra");
+		System.out.println("5 - Buscar por ID");
+		System.out.println("6 - Sair");
+		opcao = entrada.nextInt();
+
+		switch (opcao) {
+		case 1: {
+			System.out.println("Digite o dia da compra ");
+			data_compra = entrada.next();
+			compra.setdata_compra(data_compra);
+
+			System.out.println("Digite nome do cliente: ");
+			nome_cliente = entrada.next();
+			compra.setnome_cliente(nome_cliente);
+
+			System.out.println("Digite a quantidade de produtos: ");
+			quantidade_compra = entrada.nextInt();
+			compra.setquantidade_compra(quantidade_compra);
+
+			System.out.println("Digite o Destino: ");
+			destino = entrada.next();
+			compra.setdestino(destino);
+
+			contatoDAO.save(compra);
+			break;
+		}
+		case 2: {
+			System.out.println("Digite o codigo da compra para exclusao: ");
+			try {
+				nota_fiscal = entrada.nextInt();
+				
+				contatoDAO.removeById(nota_fiscal);
+				
+			} catch (Exception e) {
+				// e.getMessage();
+				 
+				System.out.println(" Nenhum contato para excluir ");
+			}
+
+			break;
+		}
+		case 3: {
+
+			System.out.println("Digite o codigo do contato para atualizar: ");
+			nota_fiscal = entrada.nextInt();
+
+			System.out.println("Digite o dia da compra ");
+			data_compra = entrada.next();
+			compra.setdata_compra(data_compra);
+
+			System.out.println("Digite nome do cliente: ");
+			nome_cliente = entrada.next();
+			compra.setnome_cliente(nome_cliente);
+
+			System.out.println("Digite a quantidade de produtos: ");
+			quantidade_compra = entrada.nextInt();
+			compra.setquantidade_compra(quantidade_compra);
+
+			System.out.println("Digite o Destino: ");
+			destino = entrada.next();
+			compra.setdestino(destino);
+
+			compra.setnota_fiscal(nota_fiscal);
+
+			contatoDAO.update(compra);
+		}
+		case 4: {
+			for (Compra p : contatoDAO.getCompras()) {
+
+				System.out.println("Data da compra: " + p.getdata_compra());
+				System.out.println("Nome do cliente: " + p.getnome_cliente());
+				System.out.println("quantidade de produto: " + p.getquantidade_compra());
+				System.out.println("Destino: " + p.getdestino());
+				System.out.println("cpf do cliente: " + p.getcpf_cliente());
+
+				System.out.println("----------------------------------- ");
+			}
+			break;
+		}
+		case 5: {
+
+			System.out.print("Digite o ID para buscar: ");
+			int id4 = entrada.nextInt();
+			
+			Compra p = new Compra();
+
+			p = contatoDAO.getCompraByid(id4);
+
+			System.out.println("Data da compra: " + p.getdata_compra());
+			System.out.println("Nome do cliente: " + p.getnome_cliente());
+			System.out.println("quantidade de produto: " + p.getquantidade_compra());
+			System.out.println("Destino: " + p.getdestino());
+			System.out.println("cpf do cliente: " + p.getcpf_cliente());
+
+			System.out.println("----------------------------------- ");
+		}
+			break;
+
+		case 6: {
+			System.out.println(" === Obrigado === ");
+			break;
+		}
+		default:
+			System.out.println("Opcao invalida: ");
+
+		
+		;
+		}
+		}
+		}
 		}while (opcao != 6);
 
 		entrada.close();
 		
-		
-		
+
+	}
+	}				
 		
 
-		}
+		
 	
-	
-}
